@@ -235,7 +235,7 @@ input[type="tel"] {
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
-  .bg-white {
+  .card {
     @apply bg-white text-black;
   }
   
