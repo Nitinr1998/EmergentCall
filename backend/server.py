@@ -161,8 +161,9 @@ async def make_call(call_request: CallRequest, background_tasks: BackgroundTasks
         await db.patients.insert_one(patient.dict())
         
         # Make the call using Twilio
+        webhook_url = f"{os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')}/api/voice/webhook"
         call = twilio_client.calls.create(
-            url=f"{os.environ.get('BACKEND_URL', 'http://localhost:8001')}/api/voice/webhook",
+            url=webhook_url,
             to=call_request.phone_number,
             from_=os.environ.get('TWILIO_PHONE_NUMBER', '+15551234567'),
             method='POST'
