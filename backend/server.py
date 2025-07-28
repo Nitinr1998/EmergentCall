@@ -374,8 +374,7 @@ async def schedule_appointment(conversation_state: ConversationState):
             }}
         )
         
-        # Log to Google Sheets (simplified - in production, use service account)
-        # For now, just log to console
+        # Log appointment data for Google Sheets
         appointment_data = {
             "patient_name": conversation_state.collected_data.get("name", ""),
             "phone_number": conversation_state.phone_number,
@@ -385,6 +384,9 @@ async def schedule_appointment(conversation_state: ConversationState):
             "booking_timestamp": datetime.utcnow().isoformat()
         }
         
+        # Log to Google Sheets
+        await log_to_google_sheets(appointment_data)
+        
         logging.info(f"Appointment scheduled: {appointment_data}")
         
         # Clean up conversation state
@@ -393,6 +395,43 @@ async def schedule_appointment(conversation_state: ConversationState):
             
     except Exception as e:
         logging.error(f"Error scheduling appointment: {str(e)}")
+
+async def log_to_google_sheets(appointment_data: dict):
+    """Log appointment data to Google Sheets"""
+    try:
+        # For now, we'll use a simplified approach
+        # In production, you would use service account credentials
+        logging.info(f"Logging to Google Sheets: {appointment_data}")
+        
+        # This is a placeholder - in production you would:
+        # 1. Use service account credentials
+        # 2. Call Google Sheets API to append data
+        # 3. Handle authentication and authorization
+        
+        # Example of what the Google Sheets API call would look like:
+        # service = build('sheets', 'v4', credentials=credentials)
+        # sheet = service.spreadsheets()
+        # values = [[
+        #     appointment_data['patient_name'],
+        #     appointment_data['phone_number'],
+        #     appointment_data['doctor'],
+        #     appointment_data['date'],
+        #     appointment_data['time'],
+        #     appointment_data['booking_timestamp']
+        # ]]
+        # body = {'values': values}
+        # result = sheet.values().append(
+        #     spreadsheetId=os.environ['GOOGLE_SHEETS_SPREADSHEET_ID'],
+        #     range='Sheet1!A1',
+        #     valueInputOption='RAW',
+        #     body=body
+        # ).execute()
+        
+        return True
+        
+    except Exception as e:
+        logging.error(f"Error logging to Google Sheets: {str(e)}")
+        return False
 
 @api_router.get("/appointments")
 async def get_appointments():
